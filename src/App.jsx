@@ -9,6 +9,8 @@ function App() {
   const [items, setItems] = useState([{ id: 1, description: '', price: 0, quantity: 1 }]);
   const [photos, setPhotos] = useState([]);
   const [workshopLogo, setWorkshopLogo] = useState(null);
+  const [observations, setObservations] = useState('');
+  const [validity, setValidity] = useState('15 dias');
 
   const total = useMemo(() => {
     return items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -49,7 +51,7 @@ function App() {
       return;
     }
     console.log('Generating PDF for:', client.name);
-    generateQuotePDF({ client, vehicle, items, total, photos, workshopLogo });
+    generateQuotePDF({ client, vehicle, items, total, photos, workshopLogo, observations, validity });
   };
 
   const handleLogoUpload = (e) => {
@@ -73,7 +75,7 @@ function App() {
     // Try Web Share API (Mobile)
     if (navigator.share && navigator.canShare) {
       try {
-        const blob = await generateQuotePDF({ client, vehicle, items, total, photos, workshopLogo }, { save: false, returnBlob: true });
+        const blob = await generateQuotePDF({ client, vehicle, items, total, photos, workshopLogo, observations, validity }, { save: false, returnBlob: true });
         const file = new File([blob], `orcamento-${vehicle.model}.pdf`, { type: 'application/pdf' });
         
         if (navigator.canShare({ files: [file] })) {
@@ -225,7 +227,7 @@ function App() {
                 <td>
                   <input 
                     type="number" 
-                    value={item.price}
+                    value={item.price === 0 ? '' : item.price}
                     onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)}
                   />
                 </td>
@@ -294,6 +296,31 @@ function App() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="section">
+        <h2 className="section-title"><FileText size={20} /> Informações Adicionais</h2>
+        <div className="grid">
+          <div className="input-group full-width">
+            <label>Observações</label>
+            <textarea 
+              placeholder="Ex: Carro com riscos na lateral, detalhes extras..."
+              value={observations}
+              onChange={(e) => setObservations(e.target.value)}
+              rows={3}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0', fontFamily: 'inherit' }}
+            />
+          </div>
+          <div className="input-group">
+            <label>Validade do Orçamento</label>
+            <input 
+              type="text" 
+              placeholder="Ex: 15 dias" 
+              value={validity}
+              onChange={(e) => setValidity(e.target.value)}
+            />
+          </div>
+        </div>
       </section>
 
       <div className="results">

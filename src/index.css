@@ -347,18 +347,87 @@ input:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
+  body {
+    padding: 0.5rem;
+  }
   .app-container {
     padding: 1.5rem;
+    border-radius: 1rem;
+  }
+  .app-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .logo-upload-wrapper {
+    margin-top: 1rem;
   }
   h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+  .subtitle {
+    margin-bottom: 1.5rem;
+  }
+  .photo-upload-container {
+    flex-direction: column;
+    gap: 1rem;
   }
   .results {
     flex-direction: column;
     align-items: stretch;
-    gap: 2rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
   }
   .total-box {
-    text-align: left;
+    text-align: center;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  .total-amount {
+    font-size: 2rem;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .items-table thead {
+    display: none;
+  }
+  .items-table, .items-table tbody, .item-row, .item-row td {
+    display: block;
+    width: 100%;
+  }
+  .item-row {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .item-row td {
+    padding: 0.5rem 0;
+  }
+  .item-row td:last-child {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+  }
+  /* Labels for table cells on mobile */
+  .item-row td:nth-child(2)::before { content: 'Preço Unt. (R$):'; display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .item-row td:nth-child(3)::before { content: 'Qtd:'; display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .item-row td:nth-child(4)::before { content: 'Subtotal:'; display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  
+  .item-row input {
+    width: 100%;
   }
 }

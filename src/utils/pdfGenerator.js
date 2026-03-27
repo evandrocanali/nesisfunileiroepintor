@@ -3,7 +3,7 @@ import autoTable from 'jspdf-autotable';
 
 export const generateQuotePDF = async (quoteData, { save = true, returnBlob = false } = {}) => {
   const doc = new jsPDF();
-  const { client, vehicle, items, total, photos, workshopLogo } = quoteData;
+  const { client, vehicle, items, total, photos, workshopLogo, observations, validity } = quoteData;
 
   // Header Logo
   if (workshopLogo) {
@@ -22,6 +22,9 @@ export const generateQuotePDF = async (quoteData, { save = true, returnBlob = fa
   doc.setFontSize(10);
   doc.setTextColor(100, 116, 139); // Muted text
   doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 14, 32);
+  if (validity) {
+    doc.text(`Validade: ${validity}`, 70, 32);
+  }
 
   // Client Info (Moved down slightly to accommodate header)
   doc.setFontSize(14);
@@ -62,10 +65,21 @@ export const generateQuotePDF = async (quoteData, { save = true, returnBlob = fa
     margin: { top: 105 },
   });
 
-  // Total
-  const finalY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : 120) + 10;
+  const finalY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : 120) + 12;
   doc.setFontSize(16);
+  doc.setTextColor(30, 41, 59);
   doc.text(`TOTAL: R$ ${total.toFixed(2).replace('.', ',')}`, 195, finalY, { align: 'right' });
+
+  // Observations
+  if (observations) {
+    const obsY = finalY + 15;
+    doc.setFontSize(12);
+    doc.text('Observações:', 14, obsY);
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    const splitObs = doc.splitTextToSize(observations, 180);
+    doc.text(splitObs, 14, obsY + 7);
+  }
 
   // Footer
   doc.setFontSize(10);
